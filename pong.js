@@ -115,7 +115,7 @@ function update() {
     // Score
     if (ballX < 0) {
         rightScore++;
-        if (rightScore >= WINNING_SCORE) {
+        if (rightScore >= WINNING_SCORE && rightScore - leftScore >= 2) {
             gameEnded = true;
             winner = 'Jugador Derecho';
             createConfetti();
@@ -125,7 +125,7 @@ function update() {
     }
     if (ballX + ballSize > canvas.width) {
         leftScore++;
-        if (leftScore >= WINNING_SCORE) {
+        if (leftScore >= WINNING_SCORE && leftScore - rightScore >= 2) {
             gameEnded = true;
             winner = 'Jugador Izquierdo';
             createConfetti();
