@@ -1,6 +1,8 @@
 const canvas = document.getElementById('pong');
 const ctx = canvas.getContext('2d');
 
+const VERSION = 'v1.0.0';
+
 const paddleWidth = 10, paddleHeight = 80;
 const ballSize = 10;
 let leftY = canvas.height / 2 - paddleHeight / 2;
@@ -161,6 +163,13 @@ function draw() {
         
         ctx.textAlign = 'left'; // Reset text alignment
     }
+    
+    // Draw version number in bottom right corner
+    ctx.fillStyle = '#888';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'right';
+    ctx.fillText(VERSION, canvas.width - 10, canvas.height - 10);
+    ctx.textAlign = 'left'; // Reset text alignment
 }
 
 function gameLoop() {
