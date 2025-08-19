@@ -8,6 +8,19 @@
 </head>
 <body>
     <h1>Pong Arcade POC</h1>
+    
+    <div class="player-names">
+        <div class="player-input">
+            <label for="leftPlayerName">Jugador Izquierdo:</label>
+            <input type="text" id="leftPlayerName" placeholder="Nombre opcional (dios griego aleatorio)">
+        </div>
+        <div class="player-input">
+            <label for="rightPlayerName">Jugador Derecho:</label>
+            <input type="text" id="rightPlayerName" placeholder="Nombre opcional (dios griego aleatorio)">
+        </div>
+        <button onclick="restartGame()">Actualizar Nombres</button>
+    </div>
+    
     <canvas id="pong" width="800" height="400"></canvas>
     <script src="pong.js"></script>
 </body>
