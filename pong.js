@@ -13,6 +13,15 @@ let gameEnded = false;
 let winner = '';
 const WINNING_SCORE = 5;
 
+// Player names
+let leftPlayerName = '';
+let rightPlayerName = '';
+const GREEK_GODS = [
+    'Zeus', 'Hera', 'Poseidón', 'Atenea', 'Apolo', 'Artemisa', 
+    'Afrodita', 'Ares', 'Hefesto', 'Deméter', 'Dioniso', 'Hermes',
+    'Hades', 'Perséfone', 'Hestia', 'Hécate', 'Helios', 'Selene'
+];
+
 // Confetti system
 let confetti = [];
 const confettiColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#800080'];
@@ -59,6 +68,29 @@ function drawConfetti() {
     }
 }
 
+function getRandomGreekGod() {
+    return GREEK_GODS[Math.floor(Math.random() * GREEK_GODS.length)];
+}
+
+function initializePlayerNames() {
+    const leftInput = document.getElementById('leftPlayerName');
+    const rightInput = document.getElementById('rightPlayerName');
+    
+    leftPlayerName = leftInput && leftInput.value.trim() !== '' ? leftInput.value.trim() : getRandomGreekGod();
+    rightPlayerName = rightInput && rightInput.value.trim() !== '' ? rightInput.value.trim() : getRandomGreekGod();
+    
+    // Ensure different names
+    if (leftPlayerName === rightPlayerName) {
+        rightPlayerName = getRandomGreekGod();
+        // Try again if still the same
+        let attempts = 0;
+        while (leftPlayerName === rightPlayerName && attempts < 10) {
+            rightPlayerName = getRandomGreekGod();
+            attempts++;
+        }
+    }
+}
+
 function drawRect(x, y, w, h, color) {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, w, h);
@@ -88,6 +120,7 @@ function restartGame() {
     gameEnded = false;
     winner = '';
     confetti = [];
+    initializePlayerNames();
     resetBall();
 }
 
@@ -117,7 +150,7 @@ function update() {
         rightScore++;
         if (rightScore >= WINNING_SCORE && rightScore - leftScore >= 2) {
             gameEnded = true;
-            winner = 'Jugador Derecho';
+            winner = rightPlayerName;
             createConfetti();
         } else {
             resetBall();
@@ -127,7 +160,7 @@ function update() {
         leftScore++;
         if (leftScore >= WINNING_SCORE && leftScore - rightScore >= 2) {
             gameEnded = true;
-            winner = 'Jugador Izquierdo';
+            winner = leftPlayerName;
             createConfetti();
         } else {
             resetBall();
@@ -140,8 +173,13 @@ function draw() {
     drawRect(0, leftY, paddleWidth, paddleHeight, '#fff');
     drawRect(canvas.width - paddleWidth, rightY, paddleWidth, paddleHeight, '#fff');
     drawBall(ballX, ballY, ballSize, '#fff');
-    drawText(leftScore, canvas.width / 4, 50);
-    drawText(rightScore, 3 * canvas.width / 4, 50);
+    
+    // Draw scores with player names
+    ctx.fillStyle = '#fff';
+    ctx.font = '24px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(leftPlayerName + ': ' + leftScore, canvas.width / 4, 30);
+    ctx.fillText(rightPlayerName + ': ' + rightScore, 3 * canvas.width / 4, 30);
     
     if (gameEnded) {
         drawConfetti();
@@ -170,6 +208,9 @@ function gameLoop() {
 }
 
 gameLoop();
+
+// Initialize player names when the page loads
+initializePlayerNames();
 
 document.addEventListener('keydown', function(e) {
     // Restart game
